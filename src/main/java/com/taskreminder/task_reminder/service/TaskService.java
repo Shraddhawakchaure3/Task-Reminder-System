@@ -9,6 +9,8 @@ public interface TaskService {
 
     Task createTask(Task task);
 
+    Task addTask(Task task);
+
     List<Task> getAllTasks();
 
     Task updateTask(Long id, Task task);
@@ -17,5 +19,5 @@ public interface TaskService {
 
     Task markTaskCompleted(Long id);
 
-    TaskStatus getTaskStatus(Long id);
+   TaskStatus getTaskStatus(Long id);
 }

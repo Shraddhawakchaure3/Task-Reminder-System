@@ -1,10 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Task Reminder System</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-$END$
+
+<header>
+    <h1>📋 Task Reminder System</h1>
+    <p>Manage your tasks • Get reminders • Stay productive</p>
+</header>
+
+<div class="container">
+
+    <!-- Add Task -->
+    <div class="card">
+        <h2>➕ Add New Task</h2>
+
+        <div class="form-row">
+            <input id="title" placeholder="Task Title">
+            <input id="dueDate" type="datetime-local">
+            <input id="email" type="email">
+
+            <button class="btn-primary" onclick="addTask()">Add Task</button>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="card actions">
+        <button class="btn-success" onclick="loadTasks()">📂 Show All Tasks</button>
+        <button class="btn-warning" onclick="loadOverview()">📊 Task Overview</button>
+        <button class="btn-danger" onclick="exportCSV()">⬇ Export CSV</button>
+    </div>
+
+    <!-- Overview -->
+    <div class="card">
+        <h2>📊 Overview</h2>
+        <p id="overview">Click "Task Overview" to view stats</p>
+    </div>
+
+    <!-- Task List -->
+    <div class="card">
+        <h2>🗂️ Tasks</h2>
+        <div id="taskList" class="task-grid"></div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

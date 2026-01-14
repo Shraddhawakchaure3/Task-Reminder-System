@@ -10,5 +10,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByStatus(TaskStatus status);
 
-    List<Task> findByUserName(String userName);
+    List<Task> findByEmail(String email);
+
 }

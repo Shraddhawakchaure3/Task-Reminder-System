@@ -3,12 +3,17 @@ package com.taskreminder.task_reminder.controller;
 import com.taskreminder.task_reminder.entity.Task;
 import com.taskreminder.task_reminder.enums.TaskStatus;
 import com.taskreminder.task_reminder.service.TaskService;
+import com.taskreminder.task_reminder.utils.CsvUtil;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/api/tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -17,33 +22,47 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    // ✅ ADD TASK
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return taskService.createTask(task);
+    public Task addTask(@RequestBody Task task) {
+        return taskService.addTask(task);
     }
 
+    // ✅ GET ALL TASKS
     @GetMapping
     public List<Task> getAllTasks() {
         return taskService.getAllTasks();
     }
 
-    @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        return taskService.updateTask(id, task);
+    // ✅ MARK TASK COMPLETED
+    @PutMapping("/{id}/complete")
+    public Task markCompleted(@PathVariable Long id) {
+        return taskService.markTaskCompleted(id);
     }
 
+    // ✅ GET TASK STATUS
+    @GetMapping("/{id}/status")
+    public TaskStatus getStatus(@PathVariable Long id) {
+        return taskService.getTaskStatus(id);
+    }
+
+    // ✅ DELETE TASK
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
 
-    @PutMapping("/completion/mark/{id}")
-    public Task markTaskCompleted(@PathVariable Long id) {
-        return taskService.markTaskCompleted(id);
-    }
+    // ✅ EXPORT CSV
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportCsv() {
 
-    @GetMapping("/status/{id}")
-    public TaskStatus getTaskStatus(@PathVariable Long id) {
-        return taskService.getTaskStatus(id);
+        List<Task> tasks = taskService.getAllTasks();
+        ByteArrayInputStream csv = CsvUtil.generateCsv(tasks);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=tasks.csv")
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(csv.readAllBytes());
     }
 }
